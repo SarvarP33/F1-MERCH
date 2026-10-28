@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Каталог')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page">
+    <h1 class="page__title">Каталог</h1>
+
+    <div class="catalog">
+        <aside class="filters">
+            <form th:action="@{/catalog}" method="get">
+                <label class="filters__label">Поиск</label>
+                <input type="search" name="q" th:value="${q}" placeholder="Название товара">
+
+                <label class="filters__label">Команда</label>
+                <select name="team">
+                    <option value="">Все команды</option>
+                    <option th:each="t : ${teams}" th:value="${t}" th:text="${t.title}"
+                            th:selected="${t == selectedTeam}"></option>
+                </select>
+
+                <label class="filters__label">Категория</label>
+                <select name="category">
+                    <option value="">Все категории</option>
+                    <option th:each="c : ${categories}" th:value="${c}" th:text="${c.title}"
+                            th:selected="${c == selectedCategory}"></option>
+                </select>
+
+                <label class="filters__label">Сортировка</label>
+                <select name="sort">
+                    <option value="" th:selected="${sort == ''}">По умолчанию</option>
+                    <option value="price_asc" th:selected="${sort == 'price_asc'}">Сначала дешевле</option>
+                    <option value="price_desc" th:selected="${sort == 'price_desc'}">Сначала дороже</option>
+                    <option value="name" th:selected="${sort == 'name'}">По названию</option>
+                </select>
+
+                <button type="submit" class="btn btn--full">Применить</button>
+                <a th:href="@{/catalog}" class="link filters__reset">Сбросить фильтры</a>
+            </form>
+        </aside>
+
+        <section>
+            <p class="muted" th:text="'Найдено товаров: ' + ${#lists.size(products)}">Найдено</p>
+            <div class="grid" th:unless="${products.isEmpty()}">
+                <th:block th:each="p : ${products}"><div th:replace="~{fragments/layout :: productCard(${p})}"></div></th:block>
+            </div>
+            <div class="empty" th:if="${products.isEmpty()}">
+                <span>🔍</span>
+                <p>Ничего не нашлось. Попробуйте изменить фильтры.</p>
+            </div>
+        </section>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Главная')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<section class="hero">
+    <div class="container hero__inner">
+        <div class="hero__text">
+            <span class="eyebrow">Сезон 2026 · Новая коллекция</span>
+            <h1>Мерч для тех,<br>кто живёт <em>на скорости</em></h1>
+            <p>Командная одежда, кепки, коллекционные модели болидов и аксессуары любимых команд.</p>
+            <div class="hero__actions">
+                <a th:href="@{/catalog}" class="btn">Смотреть каталог</a>
+                <a th:href="@{/catalog(category='MODEL')}" class="btn btn--ghost">Модели болидов</a>
+            </div>
+        </div>
+        <div class="hero__visual" aria-hidden="true">
+            <div class="checker"></div>
+            <span class="hero__car">🏎️</span>
+        </div>
+    </div>
+</section>
+
+<main class="container">
+    <section class="section">
+        <h2 class="section__title">Выбери свою команду</h2>
+        <div class="teams">
+            <a th:each="t : ${teams}" th:href="@{/catalog(team=${t})}" class="team-chip"
+               th:style="'background:' + ${t.gradient}" th:text="${t.title}">Team</a>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="section__head">
+            <h2 class="section__title">Хиты продаж</h2>
+            <a th:href="@{/catalog}" class="link">Весь каталог →</a>
+        </div>
+        <div class="grid">
+            <th:block th:each="p : ${featured}"><div th:replace="~{fragments/layout :: productCard(${p})}"></div></th:block>
+        </div>
+    </section>
+
+    <section class="section perks">
+        <div class="perk"><span>🚚</span><h3>Быстрая доставка</h3><p>2–5 дней по Казахстану</p></div>
+        <div class="perk"><span>🏁</span><h3>Бесплатно от 50 000 ₸</h3><p>Доставка за наш счёт</p></div>
+        <div class="perk"><span>↩️</span><h3>Возврат 14 дней</h3><p>Если размер не подошёл</p></div>
+    </section>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

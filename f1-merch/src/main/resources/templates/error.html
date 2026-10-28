@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Ошибка')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page">
+    <div class="empty">
+        <span>🚩</span>
+        <h1 th:text="${status == 404} ? 'Страница не найдена' : 'Что-то пошло не так'">Ошибка</h1>
+        <p class="muted">Красный флаг! Вернитесь на главную и попробуйте ещё раз.</p>
+        <a th:href="@{/}" class="btn">На главную</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

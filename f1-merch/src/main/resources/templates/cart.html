@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Корзина')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page">
+    <h1 class="page__title">Корзина</h1>
+
+    <div class="empty" th:if="${cart.isEmpty()}">
+        <span>🛒</span>
+        <p>Ваша корзина пуста.</p>
+        <a th:href="@{/catalog}" class="btn">Перейти в каталог</a>
+    </div>
+
+    <div class="cart" th:unless="${cart.isEmpty()}">
+        <div class="cart__items">
+            <div class="cart-item" th:each="item : ${cart.items}">
+                <a th:href="@{/product/{id}(id=${item.product.id})}" class="cart-item__image"
+                   th:style="'background:' + ${item.product.team.gradient}" th:text="${item.product.icon}">👕</a>
+                <div class="cart-item__info">
+                    <a th:href="@{/product/{id}(id=${item.product.id})}" class="cart-item__name" th:text="${item.product.name}">Товар</a>
+                    <span class="muted" th:if="${item.size}" th:text="'Размер: ' + ${item.size}">Размер</span>
+                    <span class="muted" th:text="${#numbers.formatDecimal(item.product.price, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸ / шт.'"></span>
+                </div>
+                <form th:action="@{/cart/update}" method="post" class="cart-item__qty">
+                    <input type="hidden" name="key" th:value="${item.key}">
+                    <input type="number" name="quantity" th:value="${item.quantity}" min="0" max="99" class="qty"
+                           onchange="this.form.submit()">
+                </form>
+                <span class="price" th:text="${#numbers.formatDecimal(item.total, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'">0 ₸</span>
+                <form th:action="@{/cart/remove}" method="post">
+                    <input type="hidden" name="key" th:value="${item.key}">
+                    <button type="submit" class="icon-btn" title="Удалить">✕</button>
+                </form>
+            </div>
+        </div>
+
+        <aside class="summary">
+            <h3>Итого</h3>
+            <div class="summary__row"><span>Товары</span>
+                <span th:text="${#numbers.formatDecimal(cart.subtotal, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'"></span></div>
+            <div class="summary__row"><span>Доставка</span>
+                <span th:text="${cart.shipping.signum() == 0} ? 'Бесплатно' : (${#numbers.formatDecimal(cart.shipping, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸')"></span></div>
+            <p class="muted small" th:if="${cart.shipping.signum() > 0}"
+               th:text="'Бесплатная доставка от ' + ${#numbers.formatDecimal(cart.freeShippingFrom, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'"></p>
+            <div class="summary__row summary__total"><span>К оплате</span>
+                <span th:text="${#numbers.formatDecimal(cart.total, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'"></span></div>
+            <a th:href="@{/checkout}" class="btn btn--full">Оформить заказ</a>
+        </aside>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

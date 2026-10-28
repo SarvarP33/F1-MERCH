@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} + ' · Pit Lane Store'">Pit Lane Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+
+<body>
+
+<header th:fragment="header" class="header">
+    <div class="container header__inner">
+        <a th:href="@{/}" class="logo">
+            <span class="logo__mark">PIT</span><span class="logo__text">LANE STORE</span>
+        </a>
+        <nav class="nav">
+            <a th:href="@{/catalog}">Каталог</a>
+            <a th:href="@{/catalog(category='TSHIRT')}">Одежда</a>
+            <a th:href="@{/catalog(category='MODEL')}">Модели</a>
+            <a th:href="@{/catalog(category='ACCESSORY')}">Аксессуары</a>
+        </nav>
+        <form th:action="@{/catalog}" method="get" class="search">
+            <input type="search" name="q" placeholder="Поиск..." aria-label="Поиск">
+        </form>
+        <a th:href="@{/cart}" class="cart-link">
+            🛒 <span>Корзина</span>
+            <span class="badge" th:if="${cartCount != null and cartCount > 0}" th:text="${cartCount}">0</span>
+        </a>
+    </div>
+    <div class="stripe"></div>
+</header>
+
+<div th:fragment="productCard(p)" class="card">
+    <a th:href="@{/product/{id}(id=${p.id})}" class="card__image" th:style="'background:' + ${p.team.gradient}">
+        <span class="card__icon" th:text="${p.icon}">👕</span>
+        <span class="card__team" th:text="${p.team.title}">Team</span>
+    </a>
+    <div class="card__body">
+        <span class="card__category" th:text="${p.category.title}">Категория</span>
+        <a th:href="@{/product/{id}(id=${p.id})}" class="card__title" th:text="${p.name}">Название</a>
+        <div class="card__footer">
+            <span class="price" th:text="${#numbers.formatDecimal(p.price, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'">0 ₸</span>
+            <a th:href="@{/product/{id}(id=${p.id})}" class="btn btn--small">Купить</a>
+        </div>
+    </div>
+</div>
+
+<footer th:fragment="footer" class="footer">
+    <div class="stripe"></div>
+    <div class="container footer__inner">
+        <div>
+            <div class="logo"><span class="logo__mark">PIT</span><span class="logo__text">LANE STORE</span></div>
+            <p class="muted">Учебный проект интернет-магазина фан-мерча на Spring Boot.</p>
+        </div>
+        <div>
+            <h4>Покупателям</h4>
+            <p class="muted">Доставка по Казахстану 2–5 дней.<br>Бесплатно от 50 000 ₸.</p>
+        </div>
+        <div>
+            <h4>Контакты</h4>
+            <p class="muted">+7 (700) 000-00-00<br>hello@pitlane.store</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Заказ оформлен')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page">
+    <div class="empty success">
+        <span>🏆</span>
+        <h1 th:text="'Спасибо, ' + ${customerName} + '!'">Спасибо!</h1>
+        <p>Заказ <strong th:text="${orderNumber}">F1-000000</strong> принят на сумму
+            <strong th:text="${#numbers.formatDecimal(orderTotal, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'"></strong>.</p>
+        <p class="muted">Мы свяжемся с вами для подтверждения доставки.</p>
+        <a th:href="@{/catalog}" class="btn">Продолжить покупки</a>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<head th:replace="~{fragments/layout :: head('Оформление заказа')}"></head>
+<body>
+<header th:replace="~{fragments/layout :: header}"></header>
+
+<main class="container page">
+    <h1 class="page__title">Оформление заказа</h1>
+
+    <div class="cart">
+        <form th:action="@{/checkout}" th:object="${orderForm}" method="post" class="checkout-form" novalidate>
+            <div class="field">
+                <label for="fullName">Имя и фамилия</label>
+                <input id="fullName" type="text" th:field="*{fullName}" th:classappend="${#fields.hasErrors('fullName')} ? 'invalid'">
+                <span class="error" th:errors="*{fullName}"></span>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'invalid'">
+                    <span class="error" th:errors="*{email}"></span>
+                </div>
+                <div class="field">
+                    <label for="phone">Телефон</label>
+                    <input id="phone" type="tel" th:field="*{phone}" placeholder="+7 700 000 00 00" th:classappend="${#fields.hasErrors('phone')} ? 'invalid'">
+                    <span class="error" th:errors="*{phone}"></span>
+                </div>
+            </div>
+            <div class="field-row">
+                <div class="field">
+                    <label for="city">Город</label>
+                    <input id="city" type="text" th:field="*{city}" th:classappend="${#fields.hasErrors('city')} ? 'invalid'">
+                    <span class="error" th:errors="*{city}"></span>
+                </div>
+                <div class="field">
+                    <label for="address">Адрес</label>
+                    <input id="address" type="text" th:field="*{address}" placeholder="Улица, дом, квартира" th:classappend="${#fields.hasErrors('address')} ? 'invalid'">
+                    <span class="error" th:errors="*{address}"></span>
+                </div>
+            </div>
+            <div class="field">
+                <label for="comment">Комментарий к заказу</label>
+                <textarea id="comment" rows="3" th:field="*{comment}"></textarea>
+            </div>
+            <button type="submit" class="btn btn--full">Подтвердить заказ</button>
+        </form>
+
+        <aside class="summary">
+            <h3>Ваш заказ</h3>
+            <div class="summary__row" th:each="item : ${cart.items}">
+                <span th:text="${item.product.name} + (${item.size} ? ' (' + ${item.size} + ')' : '') + ' × ' + ${item.quantity}"></span>
+                <span th:text="${#numbers.formatDecimal(item.total, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'"></span>
+            </div>
+            <div class="summary__row"><span>Доставка</span>
+                <span th:text="${cart.shipping.signum() == 0} ? 'Бесплатно' : (${#numbers.formatDecimal(cart.shipping, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸')"></span></div>
+            <div class="summary__row summary__total"><span>К оплате</span>
+                <span th:text="${#numbers.formatDecimal(cart.total, 1, 'WHITESPACE', 0, 'POINT')} + ' ₸'"></span></div>
+        </aside>
+    </div>
+</main>
+
+<footer th:replace="~{fragments/layout :: footer}"></footer>
+</body>
+</html>
